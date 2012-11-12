@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -49,7 +50,9 @@ public class Event extends AbstractEntity implements Auditable {
 	@JoinTable(name="USER_EVENTS",joinColumns={@JoinColumn(name="EVENT_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})
 	private List<UserDetailsEntity> attendes;
 	
-	
+	@OneToMany
+	@JoinColumn(name="EVENT_ID")
+	private List<EventMailingList> maillingList;
 	
 	@Embedded
 	private EntityAudit audit = new EntityAudit();
@@ -116,6 +119,14 @@ public class Event extends AbstractEntity implements Auditable {
 
 	public void setOwner(UserDetailsEntity owner) {
 		this.owner = owner;
+	}
+
+	public List<EventMailingList> getMaillingList() {
+		return maillingList;
+	}
+
+	public void setMaillingList(List<EventMailingList> maillingList) {
+		this.maillingList = maillingList;
 	}
 
 }

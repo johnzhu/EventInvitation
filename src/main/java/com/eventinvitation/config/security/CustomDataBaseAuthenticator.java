@@ -20,7 +20,7 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 	@Autowired
 	private UserLoginService userLoginService;
 	
-	private static int USER_NOT_FOUND_DB = 301;
+	private static int USER_NOT_FOUND_DB = 401;
 
 	public boolean supports(Class<? extends Object> authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
@@ -30,7 +30,7 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 
 			UsernamePasswordAuthenticationToken user = null;
 
-			UserLoginDTO loginDTO = null;
+			UserLoginDTO loginDTO = new UserLoginDTO();
 			
 			try {
 				loginDTO = userLoginService.handleUserLogin(authentication.getName(), authentication.getCredentials().toString());
@@ -59,10 +59,8 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 			if (loginDTO == null) {
 				throw new UsernameNotFoundException("This user is not exist in our system");
 			} else {
-				
-				String encryptiedPass = md5PasswordEncoder.encodePassword(loginDTO.getPassword().toString(), null);
-				
-				loggedUser = new UsernamePasswordAuthenticationToken(loginDTO.getEntity(), encryptiedPass, loginDTO.getGrantedAuthority());
+							
+				loggedUser = new UsernamePasswordAuthenticationToken(loginDTO.getEntity(), loginDTO.getEntity().getPassword(), loginDTO.getGrantedAuthority());
 			}
 
 			return loggedUser;
@@ -72,6 +70,22 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 		}
 
 		return null;
+	}
+
+	public Md5PasswordEncoder getMd5PasswordEncoder() {
+		return md5PasswordEncoder;
+	}
+
+	public void setMd5PasswordEncoder(Md5PasswordEncoder md5PasswordEncoder) {
+		this.md5PasswordEncoder = md5PasswordEncoder;
+	}
+
+	public UserLoginService getUserLoginService() {
+		return userLoginService;
+	}
+
+	public void setUserLoginService(UserLoginService userLoginService) {
+		this.userLoginService = userLoginService;
 	}
 
 
