@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventinvitation.domain.dto.UserDTO;
+import com.eventinvitation.domain.dto.UserDTOMapper;
 import com.eventinvitation.services.UserService;
 
 @Controller
@@ -24,7 +25,7 @@ public class UserController extends BaseController{
 	
 	@RequestMapping(value = "/restapi/secured/sign_in", method = RequestMethod.POST)
 	public @ResponseBody UserDTO sign_in() {
-		return getLoggedInUser();
+		return UserDTOMapper.mapUserEntityToUserDTO(getLoggedInUser());
 	}
 	
 	@RequestMapping(value = "/restapi/sign_up", method = RequestMethod.POST,params={"user_name","email","address","full_name","password"}, produces = "application/json")

@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eventinvitation.config.exception.UserNotExistsException;
 import com.eventinvitation.domain.UserEntity;
-import com.eventinvitation.domain.dto.UserDTO;
-import com.eventinvitation.domain.dto.UserDTOMapper;
 
 public abstract class BaseController {
 
@@ -40,11 +38,11 @@ public abstract class BaseController {
 		return ex.getMessage();
 	}
 
-	protected final UserDTO getLoggedInUser() throws UserNotExistsException{
+	protected final UserEntity getLoggedInUser() throws UserNotExistsException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() != null && !"anonymousUser".equalsIgnoreCase(authentication.getPrincipal().toString())) {
 			UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-			return UserDTOMapper.mapUserEntityToUserDTO(userEntity);
+			return userEntity;
 		}
 		else{
 			throw new UserNotExistsException("Un-authorized user");

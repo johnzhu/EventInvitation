@@ -3,12 +3,14 @@ package com.eventinvitation.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eventinvitation.dao.UserDAO;
 import com.eventinvitation.domain.UserEntity;
 import com.eventinvitation.domain.dto.UserLoginDTO;
 
 @Service("userLoginService")
+@Transactional
 public class UserLoginServiceImpl implements UserLoginService {
 	
 	private static int USER_NOT_FOUND_DB = 401;
@@ -30,8 +32,10 @@ public class UserLoginServiceImpl implements UserLoginService {
 			UserEntity userEntity = userDAO.findUserByName(username);
 			
 			if(userEntity != null) {
-				if(md5PasswordEncoder.isPasswordValid(userEntity.getPassword(), password, null))
+				if(md5PasswordEncoder.isPasswordValid(userEntity.getPassword(), password, null)){
 					loginDTO.setEntity(userEntity);
+					userDAO.updateUsetOnlineDate(userEntity.getId());
+				}
 				else
 					loginDTO.setErrorCode(USER_NOT_FOUND_DB);
 			} 
@@ -39,8 +43,10 @@ public class UserLoginServiceImpl implements UserLoginService {
 			{
 				userEntity = userDAO.findUserByEmail(username);
 				if(userEntity != null){
-					if(md5PasswordEncoder.isPasswordValid(userEntity.getPassword(), password, null))
+					if(md5PasswordEncoder.isPasswordValid(userEntity.getPassword(), password, null)){
 						loginDTO.setEntity(userEntity);
+						userDAO.updateUsetOnlineDate(userEntity.getId());
+					}
 					else
 						loginDTO.setErrorCode(USER_NOT_FOUND_DB);
 				}

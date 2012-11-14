@@ -46,11 +46,11 @@ public class Event extends AbstractEntity implements Auditable {
 	@JoinColumn(name="USER_ID")
 	private UserDetailsEntity owner;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="USER_EVENTS",joinColumns={@JoinColumn(name="EVENT_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})
 	private List<UserDetailsEntity> attendes;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="EVENT_ID")
 	private List<EventMailingList> maillingList;
 	

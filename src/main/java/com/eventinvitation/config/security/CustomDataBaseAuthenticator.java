@@ -7,11 +7,13 @@ import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eventinvitation.config.exception.UserNotExistsException;
 import com.eventinvitation.domain.dto.UserLoginDTO;
 import com.eventinvitation.services.UserLoginService;
 
+@Transactional
 public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 
 	@Autowired
@@ -32,17 +34,20 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 
 			UserLoginDTO loginDTO = new UserLoginDTO();
 			
-			try {
+			try 
+			{
 				loginDTO = userLoginService.handleUserLogin(authentication.getName(), authentication.getCredentials().toString());
-			} catch (Exception e) {
+			} catch (Exception e) 
+			{
 				e.printStackTrace();
 			}
 			
-			if(loginDTO.getErrorCode().equals(USER_NOT_FOUND_DB)) {
+			if(loginDTO.getErrorCode().equals(USER_NOT_FOUND_DB)) 
+			{
 				throw new UserNotExistsException("User not exists in our system");
 			}
-			
-			else {
+			else 
+			{
 				user = handleUsernamePassword(loginDTO);
 			}
 

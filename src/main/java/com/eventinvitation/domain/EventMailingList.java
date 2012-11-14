@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -34,6 +35,9 @@ public class EventMailingList extends AbstractEntity implements Auditable{
 	
 	@Column(name = "STATUS")
 	private String status;
+
+	@Transient
+	private UserDetailsEntity userDetailsEntity;
 	
 	@Embedded
 	private EntityAudit audit = new EntityAudit();
@@ -76,6 +80,14 @@ public class EventMailingList extends AbstractEntity implements Auditable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public UserDetailsEntity getUserDetailsEntity() {
+		return userDetailsEntity;
+	}
+
+	public void setUserDetailsEntity(UserDetailsEntity userDetailsEntity) {
+		this.userDetailsEntity = userDetailsEntity;
 	}
 	
 }

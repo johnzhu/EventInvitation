@@ -11,4 +11,6 @@ public interface UserDAO {
 	public UserEntity save(UserEntity userEntity) throws Exception ;
 	
 	public boolean isUserExistUsingUrlPattern(String urlPattern);
+	
+	public void updateUsetOnlineDate(String userId);
 }

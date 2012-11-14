@@ -13,6 +13,15 @@
 	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${deployment.email.host}" />
+		<property name="port" value="${deployment.email.port}" />
+		<property name="username" value="${deployment.email.username}" />
+		<property name="password" value="${deployment.email.password}" />
+		<property name="javaMailProperties">
+		   <props>
+	       	      <prop key="mail.smtp.auth">true</prop>
+	       	      <prop key="mail.smtp.starttls.enable">true</prop>
+	       	   </props>
+		</property>
 	</bean>
 	<!-- this is a template message that we can pre-load with default state -->
 	<bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
