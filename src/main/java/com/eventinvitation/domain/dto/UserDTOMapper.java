@@ -17,7 +17,7 @@ public class UserDTOMapper {
 	
 	public static UserDTO mapUserDetailsToUserDTO(UserDetailsEntity userDetailsEntity){
 		UserDTO userDTO = new UserDTO();
-		userDTO.setFullName(userDetailsEntity.getAddress());
+		userDTO.setAddress(userDetailsEntity.getAddress());
 		userDTO.setEmail(userDetailsEntity.getEmail());
 		userDTO.setFullName(userDetailsEntity.getName());
 		userDTO.setUserId(userDetailsEntity.getId());

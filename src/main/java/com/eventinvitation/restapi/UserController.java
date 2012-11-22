@@ -28,15 +28,17 @@ public class UserController extends BaseController{
 		return UserDTOMapper.mapUserEntityToUserDTO(getLoggedInUser());
 	}
 	
-	@RequestMapping(value = "/restapi/sign_up", method = RequestMethod.POST,params={"user_name","email","address","full_name","password"}, produces = "application/json")
+	@RequestMapping(value = "/restapi/sign_up", method = RequestMethod.POST,params={"user_name","email","street","full_name","password","state","country"}, produces = "application/json")
 	public @ResponseBody UserDTO sign_up(
 			@RequestParam(value = "user_name", required = true) String username,
 			@RequestParam(value = "email", required = true) String email,
-			@RequestParam(value = "address", required = false) String address,
+			@RequestParam(value = "street", required = false) String street,
 			@RequestParam(value = "password", required = true) String password,
-			@RequestParam(value = "full_name", required = true) String fullName) throws Exception{
+			@RequestParam(value = "full_name", required = true) String fullName,
+			@RequestParam(value = "country", required = true) String country,
+			@RequestParam(value = "state", required = true) String state) throws Exception{
 		
-		return getUserService().signup(username, email, address, fullName, password);
+		return getUserService().signup(username, email, street, fullName, password,state,country);
 	}
 
 	@RequestMapping(value = "/restapi/is_user", method = RequestMethod.GET,params={"url"})

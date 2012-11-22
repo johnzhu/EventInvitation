@@ -2,13 +2,15 @@ package com.eventinvitation.domain.dto;
 
 import java.io.Serializable;
 
+import com.eventinvitation.domain.Address;
+
 public class UserDTO implements Serializable {
 
 	private static final long serialVersionUID = 8304817856447116717L;
 	
 	private String fullName;
 	private String email;
-	private String address;
+	private Address address;
 	private String userId;
 	
 	public String getFullName() {
@@ -23,10 +25,10 @@ public class UserDTO implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 	public String getUserId() {

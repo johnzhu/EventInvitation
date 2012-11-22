@@ -39,8 +39,8 @@ public class Event extends AbstractEntity implements Auditable {
 	@Column(name = "TIME")
 	private String time;
 	
-	@Column(name = "ADDRESS")
-	private String address;
+	@Embedded
+	private Address address;
 	
 	@ManyToOne
 	@JoinColumn(name="USER_ID")
@@ -97,11 +97,11 @@ public class Event extends AbstractEntity implements Auditable {
 		this.time = time;
 	}
 
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 

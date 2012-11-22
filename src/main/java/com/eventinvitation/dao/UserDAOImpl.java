@@ -82,7 +82,7 @@ public class UserDAOImpl implements UserDAO {
 		criteria.createAlias("userDetails", "userDetails");
 		UserEntity userEntity = (UserEntity)criteria.uniqueResult();
 		if(userEntity != null){
-			message = "Email already exist";
+			message = "Error: Email already exist";
 		}
 		currentSession = getSessionFactory().getCurrentSession();
 		criteria = currentSession.createCriteria(UserEntity.class);
@@ -90,7 +90,7 @@ public class UserDAOImpl implements UserDAO {
 		userEntity = (UserEntity)criteria.uniqueResult();
 		if(userEntity != null){
 			if(message == null)
-				message = "Username already exist";
+				message = "Error: Username already exist";
 			else
 				message = message + " and Username already exist";
 		}

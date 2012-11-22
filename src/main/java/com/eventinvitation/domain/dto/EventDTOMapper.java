@@ -30,14 +30,16 @@ public class EventDTOMapper {
 			return acceptListDTOs;
 		
 		for(EventMailingList mailingList : eventMailingList){
-			AcceptListDTO acceptListDTO = new AcceptListDTO();
-			acceptListDTO.setEmail(mailingList.getEmail());
-			acceptListDTO.setStatus(mailingList.getStatus());
-			if(mailingList.getUserDetailsEntity() != null){
-				acceptListDTO.setName(mailingList.getUserDetailsEntity().getName());
-				acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
+			if("Accepted".equals(mailingList.getStatus())){
+				AcceptListDTO acceptListDTO = new AcceptListDTO();
+				acceptListDTO.setEmail(mailingList.getEmail());
+				acceptListDTO.setStatus(mailingList.getStatus());
+				if(mailingList.getUserDetailsEntity() != null){
+					acceptListDTO.setName(mailingList.getUserDetailsEntity().getName());
+					acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
+				}
+				acceptListDTOs.add(acceptListDTO);
 			}
-			acceptListDTOs.add(acceptListDTO);
 		}
 		
 		return acceptListDTOs;

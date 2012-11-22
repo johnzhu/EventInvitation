@@ -25,17 +25,19 @@ public class EventController extends BaseController {
 		super(EventController.class);
 	}
 	
-	@RequestMapping(value = "/restapi/secured/create_event", method = RequestMethod.GET,params={"name","address","time","description","mailling_list"}, produces = "application/json")
+	@RequestMapping(value = "/restapi/secured/create_event", method = RequestMethod.POST,params={"name", "street","country","state", "time","description","mailling_list"}, produces = "application/json")
 	public @ResponseBody EventDTO createEvent
 			(
 			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "address", required = true) String address,
+			@RequestParam(value = "street", required = true) String street,
+			@RequestParam(value = "country", required = true) String country,
+			@RequestParam(value = "state", required = true) String state,
 			@RequestParam(value = "time", required = true) String time,
 			@RequestParam(value = "description", required = true) String description,
 			@RequestParam(value = "mailling_list", required = true) String mailling_list
 			) {
-		String mailling_list_arr[] = mailling_list.split(",");
-		return getEventService().createEvent(name, address, time, description, mailling_list_arr,getLoggedInUser().getUserDetails());
+		String mailling_list_arr[] = mailling_list.split(";");
+		return getEventService().createEvent(name,street,country,state, time, description, mailling_list_arr,getLoggedInUser().getUserDetails());
 	}
 	
 	@RequestMapping(value = "/restapi/secured/event", method = RequestMethod.GET,params={"id"})
@@ -53,7 +55,7 @@ public class EventController extends BaseController {
 		getEventService().acceptEvent(url);
 	}
 	
-	@RequestMapping(value = "/restapi/secured/reject_event", method = RequestMethod.GET,params={"url"})
+	@RequestMapping(value = "/restapi/reject_event", method = RequestMethod.GET,params={"url"})
 	public @ResponseBody void rejectEvent(@RequestParam(value = "url", required = true) String url) throws Exception {
 		getEventService().rejectEvent(url);
 	}

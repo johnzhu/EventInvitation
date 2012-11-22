@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eventinvitation.dao.UserDAO;
+import com.eventinvitation.domain.Address;
 import com.eventinvitation.domain.EntityAudit;
 import com.eventinvitation.domain.UserDetailsEntity;
 import com.eventinvitation.domain.UserEntity;
@@ -34,12 +35,16 @@ public class UserServiceImpl implements UserService {
 		this.userDAO = userDAO;
 	}
 
-	public UserDTO signup(String userName, String email, String address,String fullName, String password) throws Exception{
+	public UserDTO signup(String userName, String email, String street,String fullName, String password,String state,String country) throws Exception{
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEnabled(true);
 		userEntity.setPassword(md5PasswordEncoder.encodePassword(password, null));
 		userEntity.setUsername(userName);
 		UserDetailsEntity userDetailsEntity = new UserDetailsEntity();
+		Address address = new Address();
+		address.setCountry(country);
+		address.setState(state);
+		address.setStreet(street);
 		userDetailsEntity.setAddress(address);
 		userDetailsEntity.setEmail(email);
 		userDetailsEntity.setName(fullName);

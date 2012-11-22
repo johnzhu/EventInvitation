@@ -4,7 +4,7 @@ import com.eventinvitation.domain.dto.UserDTO;
 
 public interface UserService {
 	
-	public UserDTO signup(String userName,String email,String address,String fullName,String password) throws Exception;
+	public UserDTO signup(String userName,String email,String street,String fullName,String password,String state,String country) throws Exception;
 	
 	public boolean checkUserExist(String urlPattern);
 

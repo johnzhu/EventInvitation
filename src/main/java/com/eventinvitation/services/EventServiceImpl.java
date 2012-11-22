@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eventinvitation.dao.EventDAO;
+import com.eventinvitation.domain.Address;
 import com.eventinvitation.domain.EntityAudit;
 import com.eventinvitation.domain.Event;
 import com.eventinvitation.domain.EventMailingList;
@@ -30,9 +31,13 @@ public class EventServiceImpl implements EventService {
 
 	private List<EventMailingList> eventMailingLists;
 
-	public EventDTO createEvent(String name, String address, String time,
+	public EventDTO createEvent(String name, String street,String country,String state, String time,
 			String description, String[] mailling_list, UserDetailsEntity owner) {
 		Event event = new Event();
+		Address address = new Address();
+		address.setCountry(country);
+		address.setState(state);
+		address.setStreet(street);
 		event.setAddress(address);
 		event.setDdescription(description);
 		event.setName(name);

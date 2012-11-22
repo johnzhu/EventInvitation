@@ -42,8 +42,8 @@ public class UserDetailsEntity extends AbstractEntity implements Auditable {
 	@Column(name = "NAME")
 	private String name;
 
-	@Column(name = "ADDRESS")
-	private String address;
+	@Embedded
+	private Address address;
 
 	@OneToOne
 	@PrimaryKeyJoinColumn
@@ -95,14 +95,6 @@ public class UserDetailsEntity extends AbstractEntity implements Auditable {
 		return this.id;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public List<Event> getMyEvents() {
 		return myEvents;
 	}
@@ -117,6 +109,14 @@ public class UserDetailsEntity extends AbstractEntity implements Auditable {
 
 	public void setAttendedEvents(List<Event> attendedEvents) {
 		this.attendedEvents = attendedEvents;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 }
