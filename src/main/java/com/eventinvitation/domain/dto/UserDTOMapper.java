@@ -8,7 +8,7 @@ public class UserDTOMapper {
 	
 	public static UserDTO mapUserEntityToUserDTO(UserEntity userEntity){
 		UserDTO userDTO = new UserDTO();
-		userDTO.setAddress(userEntity.getUserDetails().getAddress());
+		userDTO.setAddress(AddressDTOMapper.mapFromAddressToAddressDTO(userEntity.getUserDetails().getAddress()));
 		userDTO.setEmail(userEntity.getUserDetails().getEmail());
 		userDTO.setFullName(userEntity.getUserDetails().getName());
 		userDTO.setUserId(userEntity.getId());
@@ -17,7 +17,7 @@ public class UserDTOMapper {
 	
 	public static UserDTO mapUserDetailsToUserDTO(UserDetailsEntity userDetailsEntity){
 		UserDTO userDTO = new UserDTO();
-		userDTO.setAddress(userDetailsEntity.getAddress());
+		userDTO.setAddress(AddressDTOMapper.mapFromAddressToAddressDTO(userDetailsEntity.getAddress()));
 		userDTO.setEmail(userDetailsEntity.getEmail());
 		userDTO.setFullName(userDetailsEntity.getName());
 		userDTO.setUserId(userDetailsEntity.getId());

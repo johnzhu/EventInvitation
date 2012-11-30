@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.eventinvitation.domain.dto.UserDTO;
 import com.eventinvitation.domain.dto.UserDTOMapper;
 import com.eventinvitation.services.UserService;
+import com.eventinvitation.util.Validator;
 
 @Controller
 @Transactional
@@ -37,6 +38,12 @@ public class UserController extends BaseController{
 			@RequestParam(value = "full_name", required = true) String fullName,
 			@RequestParam(value = "country", required = true) String country,
 			@RequestParam(value = "state", required = true) String state) throws Exception{
+		
+		if(!Validator.isValidPassword(password))
+			throw new Exception("Invalid password, Minimum length is 8 digits/characters");
+		
+		if(!Validator.isValidEmail(email))
+			throw new Exception("Invalid email format");
 		
 		return getUserService().signup(username, email, street, fullName, password,state,country);
 	}

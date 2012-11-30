@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -39,7 +41,8 @@ public class Event extends AbstractEntity implements Auditable {
 	@Column(name = "TIME")
 	private String time;
 	
-	@Embedded
+	@OneToOne
+	@PrimaryKeyJoinColumn
 	private Address address;
 	
 	@ManyToOne

@@ -27,6 +27,10 @@ public class EventDAOImpl implements EventDAO {
 	public Event saveEvent(Event event) {
 		Session session = getSessionFactory().getCurrentSession();
 		session.save(event);
+		if(event.getAddress() != null){
+			event.getAddress().setId(event.getId());
+			session.save(event.getAddress());
+		}
 		return event;
 	}
 

@@ -14,7 +14,7 @@ public class EventDTOMapper {
 		}
 		EventDTO eventDTO = new EventDTO();
 		eventDTO.setAcceptListDTOs(mapMaillingListToAcceptListDTO(event.getMaillingList()));
-		eventDTO.setAddress(event.getAddress());
+		eventDTO.setAddress(AddressDTOMapper.mapFromAddressToAddressDTO(event.getAddress()));
 		eventDTO.setDescription(event.getDescription());
 		eventDTO.setId(event.getId());
 		eventDTO.setName(event.getName());

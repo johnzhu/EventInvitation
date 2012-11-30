@@ -3,8 +3,6 @@ package com.eventinvitation.domain.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import com.eventinvitation.domain.Address;
-
 public class EventDTO implements Serializable {
 
 	private static final long serialVersionUID = -2655825145416045630L;
@@ -13,7 +11,7 @@ public class EventDTO implements Serializable {
 	private String name;
 	private String description;
 	private String time;
-	private Address address;
+	private AddressDTO address;
 	private UserDTO owner;
 	
 	private List<AcceptListDTO> acceptListDTOs;
@@ -42,10 +40,10 @@ public class EventDTO implements Serializable {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	public Address getAddress() {
+	public AddressDTO getAddress() {
 		return address;
 	}
-	public void setAddress(Address address) {
+	public void setAddress(AddressDTO address) {
 		this.address = address;
 	}
 	public UserDTO getOwner() {

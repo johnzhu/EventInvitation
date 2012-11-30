@@ -3,12 +3,19 @@ package com.eventinvitation.domain;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Embeddable
+@Entity
+@Table(name = "ADDRESS")
 public class Address implements Serializable {
 
 	private static final long serialVersionUID = 5197034136907730162L;
+	
+	@Id
+	@Column(name = "ID")
+	private String id;
 	
 	@Column(name = "STREET")
 	private String street;
@@ -41,6 +48,14 @@ public class Address implements Serializable {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

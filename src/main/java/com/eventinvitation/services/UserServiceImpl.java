@@ -15,6 +15,7 @@ import com.eventinvitation.domain.UserDetailsEntity;
 import com.eventinvitation.domain.UserEntity;
 import com.eventinvitation.domain.dto.UserDTO;
 import com.eventinvitation.domain.dto.UserDTOMapper;
+import com.eventinvitation.util.Validator;
 
 @Service
 @Transactional( propagation = Propagation.MANDATORY )
@@ -45,7 +46,8 @@ public class UserServiceImpl implements UserService {
 		address.setCountry(country);
 		address.setState(state);
 		address.setStreet(street);
-		userDetailsEntity.setAddress(address);
+		if(Validator.isValidAddress(address))
+			userDetailsEntity.setAddress(address);
 		userDetailsEntity.setEmail(email);
 		userDetailsEntity.setName(fullName);
 		EntityAudit audit = new EntityAudit();

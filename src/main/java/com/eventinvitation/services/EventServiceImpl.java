@@ -18,6 +18,7 @@ import com.eventinvitation.domain.dto.AcceptListDTO;
 import com.eventinvitation.domain.dto.EventDTO;
 import com.eventinvitation.domain.dto.EventDTOMapper;
 import com.eventinvitation.util.Mailer;
+import com.eventinvitation.util.Validator;
 
 @Service
 @Transactional
@@ -38,7 +39,8 @@ public class EventServiceImpl implements EventService {
 		address.setCountry(country);
 		address.setState(state);
 		address.setStreet(street);
-		event.setAddress(address);
+		if(Validator.isValidAddress(address))
+			event.setAddress(address);
 		event.setDdescription(description);
 		event.setName(name);
 		event.setTime(time);

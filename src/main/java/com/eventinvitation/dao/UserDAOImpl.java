@@ -47,6 +47,10 @@ public class UserDAOImpl implements UserDAO {
 		if(message == null){
 			Session currentSession = getSessionFactory().getCurrentSession();
 			currentSession.save(userEntity);
+			if(userEntity.getUserDetails().getAddress() != null){
+				userEntity.getUserDetails().getAddress().setId(userEntity.getId());
+				currentSession.save(userEntity.getUserDetails().getAddress());
+			}
 			return userEntity;
 		}
 		else{
