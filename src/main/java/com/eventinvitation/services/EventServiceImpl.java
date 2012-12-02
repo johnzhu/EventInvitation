@@ -20,6 +20,10 @@ import com.eventinvitation.domain.dto.EventDTOMapper;
 import com.eventinvitation.util.Mailer;
 import com.eventinvitation.util.Validator;
 
+/**
+ * @author saeedhas
+ *
+ */
 @Service
 @Transactional
 public class EventServiceImpl implements EventService {
@@ -70,6 +74,10 @@ public class EventServiceImpl implements EventService {
 
 	public EventDTO getEvent(String eventId) {
 		return EventDTOMapper.mapEventToEventDTO(eventDAO.getEvent(eventId));
+	}
+
+	public EventDTO getEventByPattern(String pattern) {
+		return EventDTOMapper.mapEventToEventDTO(eventDAO.getEventByPattern(pattern));
 	}
 
 	public List<EventDTO> listEventsByUser(String userId) {

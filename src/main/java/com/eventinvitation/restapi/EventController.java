@@ -45,6 +45,11 @@ public class EventController extends BaseController {
 		return getEventService().getEvent(id);
 	}
 	
+	@RequestMapping(value = "/restapi/eventByPattern", method = RequestMethod.GET,params={"pattern"})
+	public @ResponseBody EventDTO eventByPattern(@RequestParam(value = "pattern", required = true) String pattern) {
+		return getEventService().getEventByPattern(pattern);
+	}
+	
 	@RequestMapping(value = "/restapi/secured/events", method = RequestMethod.GET)
 	public @ResponseBody List<EventDTO> events() {
 		return getEventService().listEventsByUser(getLoggedInUser().getId());

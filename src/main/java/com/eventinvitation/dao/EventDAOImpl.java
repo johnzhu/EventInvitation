@@ -39,6 +39,14 @@ public class EventDAOImpl implements EventDAO {
 		return (Event)session.get(Event.class, eventId);
 	}
 
+	public Event getEventByPattern(String pattern) {
+		Session session = getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(EventMailingList.class);
+		criteria.add(Restrictions.eq("id", pattern));
+		EventMailingList eventMailingList = (EventMailingList) criteria.uniqueResult();
+		return eventMailingList.getEvent();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Event> listEventsByUser(String userId) {
 		Session session = getSessionFactory().getCurrentSession();

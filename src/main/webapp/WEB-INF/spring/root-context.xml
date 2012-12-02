@@ -30,8 +30,7 @@
 	<bean id="mailer" class="com.eventinvitation.util.Mailer">
 		<property name="mailSender" ref="mailSender" />
 		<property name="templateMessage" ref="templateMessage" />
-		<property name="accept_link_text" value="${deployment.email.accept_link}"/>
-		<property name="reject_link_text" value="${deployment.email.reject_link}"/>
+		<property name="view_link_text" value="${deployment.email.view_link}"/>
 	</bean>
 
 </beans>

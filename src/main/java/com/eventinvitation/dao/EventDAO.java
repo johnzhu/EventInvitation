@@ -18,4 +18,6 @@ public interface EventDAO {
 	public void rejectEvent(String urlPattern) throws Exception ;
 	
 	public List<EventMailingList> getEventAttendance(String eventId);
+
+	public Event getEventByPattern(String pattern);
 }

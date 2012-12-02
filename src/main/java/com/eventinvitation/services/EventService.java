@@ -20,4 +20,6 @@ public interface EventService {
 	
 	public List<AcceptListDTO> getEventAttendance(String eventId);
 
+	public EventDTO getEventByPattern(String pattern);
+
 }

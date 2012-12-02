@@ -15,9 +15,7 @@ public class Mailer implements InviteFriends {
 	
     private SimpleMailMessage templateMessage;
     
-    private String accept_link_text = null;
-    
-    private String reject_link_text = null;
+    private String view_link_text = null;
     
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
@@ -27,12 +25,8 @@ public class Mailer implements InviteFriends {
         this.templateMessage = templateMessage;
     }
 
-	public void setAccept_link_text(String accept_link_text) {
-		this.accept_link_text = accept_link_text;
-	}
-
-	public void setReject_link_text(String reject_link_text) {
-		this.reject_link_text = reject_link_text;
+	public void setView_link_text(String view_link_text) {
+		this.view_link_text = view_link_text;
 	}
 
 	public void inviteFriends(List<EventMailingList> eventMailingList) {
@@ -47,9 +41,7 @@ public class Mailer implements InviteFriends {
 		        			+ " Invite you attend " 
 		        			+ email.getEvent().getName() 
 		        			+ "<br>"
-		        			+ String.format(accept_link_text, email.getId()) 
-		        			+ " | " 
-		        			+ String.format(reject_link_text, email.getId())
+		        			+ String.format(view_link_text, email.getId())
 		        			);
 		        try{
 		            this.mailSender.send(msg);
