@@ -36,7 +36,9 @@ public class EventController extends BaseController {
 			@RequestParam(value = "description", required = true) String description,
 			@RequestParam(value = "mailling_list", required = true) String mailling_list
 			) {
-		String mailling_list_arr[] = mailling_list.split(";");
+		String mailling_list_arr[] = mailling_list.split(";|,");
+		for(String user : mailling_list_arr)
+			System.out.println(user);
 		return getEventService().createEvent(name,street,country,state, time, description, mailling_list_arr,getLoggedInUser().getUserDetails());
 	}
 	
@@ -50,6 +52,11 @@ public class EventController extends BaseController {
 		return getEventService().getEventByPattern(pattern);
 	}
 	
+	@RequestMapping(value = "/restapi/secured/lastEvent", method = RequestMethod.GET)
+	public @ResponseBody EventDTO lastEvent() {
+		return getEventService().getLastEvent(getLoggedInUser().getId());
+	}
+	
 	@RequestMapping(value = "/restapi/secured/events", method = RequestMethod.GET)
 	public @ResponseBody List<EventDTO> events() {
 		return getEventService().listEventsByUser(getLoggedInUser().getId());
@@ -57,7 +64,7 @@ public class EventController extends BaseController {
 	
 	@RequestMapping(value = "/restapi/secured/accept_event", method = RequestMethod.GET,params={"url"})
 	public @ResponseBody void acceptEvent(@RequestParam(value = "url", required = true) String url) throws Exception{
-		getEventService().acceptEvent(url);
+		getEventService().acceptEvent(url,getLoggedInUser().getUserDetails().getEmail());
 	}
 	
 	@RequestMapping(value = "/restapi/reject_event", method = RequestMethod.GET,params={"url"})
@@ -68,6 +75,11 @@ public class EventController extends BaseController {
 	@RequestMapping(value = "/restapi/secured/accept_list", method = RequestMethod.GET,params={"id"})
 	public @ResponseBody List<AcceptListDTO> acceptList(@RequestParam(value = "id", required = true) String id) {
 		return getEventService().getEventAttendance(id);
+	}
+	
+	@RequestMapping(value = "/restapi/secured/refresh", method = RequestMethod.GET,params={"id","online_flag"})
+	public @ResponseBody List<AcceptListDTO> refresh(@RequestParam(value = "id", required = true) String id,@RequestParam(value = "online_flag", required = true) String onlineFlag) {
+		return getEventService().refreshEventAttendance(id,onlineFlag);
 	}
 
 	public EventService getEventService() {

@@ -1,6 +1,7 @@
 package com.eventinvitation.domain.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.eventinvitation.domain.Event;
@@ -13,7 +14,7 @@ public class EventDTOMapper {
 			return null;
 		}
 		EventDTO eventDTO = new EventDTO();
-		eventDTO.setAcceptListDTOs(mapMaillingListToAcceptListDTO(event.getMaillingList()));
+		eventDTO.setAcceptListDTOs(mapMaillingListToAcceptListDTO(event.getMaillingList(),null));
 		eventDTO.setAddress(AddressDTOMapper.mapFromAddressToAddressDTO(event.getAddress()));
 		eventDTO.setDescription(event.getDescription());
 		eventDTO.setId(event.getId());
@@ -23,8 +24,9 @@ public class EventDTOMapper {
 		return eventDTO;
 	}
 	
-	public static List<AcceptListDTO> mapMaillingListToAcceptListDTO(List<EventMailingList> eventMailingList){
+	public static List<AcceptListDTO> mapMaillingListToAcceptListDTO(List<EventMailingList> eventMailingList,String onlineFlag){
 		List<AcceptListDTO> acceptListDTOs = new ArrayList<AcceptListDTO>();
+		Date currentDate = new Date();
 		
 		if(eventMailingList == null)
 			return acceptListDTOs;
@@ -36,6 +38,14 @@ public class EventDTOMapper {
 			if(mailingList.getUserDetailsEntity() != null){
 				acceptListDTO.setName(mailingList.getUserDetailsEntity().getName());
 				acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
+				if(onlineFlag != null){
+					if(((currentDate.getTime() - mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().getTime())/60) > Integer.parseInt(onlineFlag)){
+						acceptListDTO.setOnline(false);
+					}					
+					else{
+						acceptListDTO.setOnline(true);
+					}
+				}
 			}
 			acceptListDTOs.add(acceptListDTO);
 		}

@@ -10,6 +10,7 @@ public class AcceptListDTO implements Serializable{
 	private String email;
 	private String status;
 	private String lastOnlineDateTime;
+	private boolean online;
 	
 	public String getName() {
 		return name;
@@ -34,6 +35,12 @@ public class AcceptListDTO implements Serializable{
 	}
 	public void setLastOnlineDateTime(String lastOnlineDateTime) {
 		this.lastOnlineDateTime = lastOnlineDateTime;
+	}
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
 	}
 	
 	

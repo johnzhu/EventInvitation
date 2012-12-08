@@ -40,16 +40,16 @@ public class UserController extends BaseController{
 			@RequestParam(value = "state", required = true) String state) throws Exception{
 		
 		if(!Validator.isValidPassword(password))
-			throw new Exception("Invalid password, Minimum length is 8 digits/characters");
+			throw new Exception("Error: Invalid password, Minimum length is 8 digits/characters");
 		
 		if(!Validator.isValidEmail(email))
-			throw new Exception("Invalid email format");
+			throw new Exception("Error: Invalid email format");
 		
 		return getUserService().signup(username, email, street, fullName, password,state,country);
 	}
 
 	@RequestMapping(value = "/restapi/is_user", method = RequestMethod.GET,params={"url"})
-	public @ResponseBody boolean isUser(@RequestParam(value = "url", required = true) String url) {
+	public @ResponseBody String isUser(@RequestParam(value = "url", required = true) String url) {
 		return getUserService().checkUserExist(url);
 	}
 

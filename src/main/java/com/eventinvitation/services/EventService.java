@@ -14,12 +14,16 @@ public interface EventService {
 	
 	public List<EventDTO> listEventsByUser(String userId);
 	
-	public void acceptEvent(String urlPattern) throws Exception ;
+	public void acceptEvent(String urlPattern,String currentLogedInEmail) throws Exception ;
 	
 	public void rejectEvent(String urlPattern) throws Exception ;
 	
 	public List<AcceptListDTO> getEventAttendance(String eventId);
 
 	public EventDTO getEventByPattern(String pattern);
+
+	public EventDTO getLastEvent(String currentUserId);
+
+	public List<AcceptListDTO> refreshEventAttendance(String id,String onlineFlag);
 
 }

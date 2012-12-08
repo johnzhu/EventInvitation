@@ -13,6 +13,7 @@ public class EventDTO implements Serializable {
 	private String time;
 	private AddressDTO address;
 	private UserDTO owner;
+	private String errorMessage;
 	
 	private List<AcceptListDTO> acceptListDTOs;
 	
@@ -57,5 +58,11 @@ public class EventDTO implements Serializable {
 	}
 	public void setAcceptListDTOs(List<AcceptListDTO> acceptListDTOs) {
 		this.acceptListDTOs = acceptListDTOs;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 }

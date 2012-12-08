@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,7 +37,9 @@ public class EventDAOImpl implements EventDAO {
 
 	public Event getEvent(String eventId) {
 		Session session = getSessionFactory().getCurrentSession();
-		return (Event)session.get(Event.class, eventId);
+		Event event = (Event)session.get(Event.class, eventId);
+		event.setMaillingList(getEventAttendance(event.getId()));
+		return event;
 	}
 
 	public Event getEventByPattern(String pattern) {
@@ -44,7 +47,9 @@ public class EventDAOImpl implements EventDAO {
 		Criteria criteria = session.createCriteria(EventMailingList.class);
 		criteria.add(Restrictions.eq("id", pattern));
 		EventMailingList eventMailingList = (EventMailingList) criteria.uniqueResult();
-		return eventMailingList.getEvent();
+		Event event = eventMailingList.getEvent();
+		event.setMaillingList(getEventAttendance(event.getId()));
+		return event;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -55,12 +60,15 @@ public class EventDAOImpl implements EventDAO {
 		return criteria.list();
 	}
 
-	public void acceptEvent(String urlPattern) throws Exception {
+	public void acceptEvent(String urlPattern,String currentEmail) throws Exception {
 		Session session = getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(EventMailingList.class);
 		criteria.add(Restrictions.eq("id", urlPattern));
 		EventMailingList eventMailingList = (EventMailingList) criteria.uniqueResult();
 		if(eventMailingList != null){
+			if(!eventMailingList.getEmail().equals(currentEmail)){
+				throw new Exception("You are not authorized to access this link.");
+			}
 			Event event = eventMailingList.getEvent();
 			eventMailingList.setStatus("Accepted");
 			EntityAudit audit = eventMailingList.getAudit();
@@ -120,6 +128,56 @@ public class EventDAOImpl implements EventDAO {
 		}
 		return eventMailingLists;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<EventMailingList> getRefreshedAttendance(String id) {
+		Session session = getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(EventMailingList.class);
+		criteria.add(Restrictions.eq("event.id", id));
+		criteria.add(Restrictions.eq("status", "Accepted"));
+		List<EventMailingList> eventMailingLists = criteria.list();
+		if(eventMailingLists != null){
+			for(EventMailingList eventMailingList : eventMailingLists){
+				criteria = session.createCriteria(UserDetailsEntity.class);
+				criteria.add(Restrictions.eq("email", eventMailingList.getEmail()));
+				UserDetailsEntity userDetailsEntity = (UserDetailsEntity)criteria.uniqueResult();
+				if(userDetailsEntity != null){
+					eventMailingList.setUserDetailsEntity(userDetailsEntity);
+				}
+			}
+		}
+		return eventMailingLists;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Event getLastEvent(String currentUserId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Event.class);
+		criteria.createAlias("attendes", "attendes");
+		criteria.add(Restrictions.eq("attendes.id", currentUserId));
+		criteria.addOrder(Order.desc("audit.createdOn"));
+		criteria.setMaxResults(1);
+		List result = criteria.list();
+		if(result != null && result.size() > 0){
+			Event event = (Event)result.get(0);
+			event.setMaillingList(getEventAttendance(event.getId()));
+			return event;
+		}
+		else{
+			criteria = session.createCriteria(Event.class);
+			criteria.add(Restrictions.eq("owner.id", currentUserId));
+			criteria.addOrder(Order.desc("audit.createdOn"));
+			criteria.setMaxResults(1);
+			result = criteria.list();
+			if(result != null && result.size() > 0){
+				Event event = (Event)result.get(0);
+				event.setMaillingList(getEventAttendance(event.getId()));
+				return event;
+			}
+			else
+				return null;
+		}
+	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -128,5 +186,4 @@ public class EventDAOImpl implements EventDAO {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
 }

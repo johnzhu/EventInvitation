@@ -58,12 +58,12 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 	
-	public boolean isUserExistUsingUrlPattern(String urlPattern){
-		boolean result = false;
+	public String isUserExistUsingUrlPattern(String urlPattern){
+		String result = null;
 		Session currentSession = getSessionFactory().getCurrentSession();
 		EventMailingList eventMailingList = (EventMailingList)currentSession.get(EventMailingList.class, urlPattern);
 		if(eventMailingList == null)
-			result = false;
+			result = null;
 		else{
 			String email = eventMailingList.getEmail();
 			Criteria criteria = currentSession.createCriteria(UserEntity.class);
@@ -71,9 +71,9 @@ public class UserDAOImpl implements UserDAO {
 			criteria.createAlias("userDetails", "userDetails");
 			UserEntity userEntity = (UserEntity)criteria.uniqueResult();
 			if(userEntity != null)
-				result = true;
+				result = "true:" +userEntity.getUserDetails().getEmail();
 			else
-				result = false;
+				result = email;
 		}
 		return result;
 	}

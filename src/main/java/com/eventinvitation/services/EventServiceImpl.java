@@ -38,6 +38,8 @@ public class EventServiceImpl implements EventService {
 
 	public EventDTO createEvent(String name, String street,String country,String state, String time,
 			String description, String[] mailling_list, UserDetailsEntity owner) {
+		String invalidEmails = "Invalid Emails: ";
+		boolean errorExist = false;
 		Event event = new Event();
 		Address address = new Address();
 		address.setCountry(country);
@@ -55,12 +57,18 @@ public class EventServiceImpl implements EventService {
 		event.setAudit(audit);
 		eventMailingLists = new ArrayList<EventMailingList>();
 		for (String mail : mailling_list) {
-			EventMailingList eventMailingList = new EventMailingList();
-			eventMailingList.setAudit(audit);
-			eventMailingList.setEmail(mail);
-			eventMailingList.setEvent(event);
-			eventMailingList.setStatus("Pending");
-			eventMailingLists.add(eventMailingList);
+			if(Validator.isValidEmail(mail)){
+				EventMailingList eventMailingList = new EventMailingList();
+				eventMailingList.setAudit(audit);
+				eventMailingList.setEmail(mail);
+				eventMailingList.setEvent(event);
+				eventMailingList.setStatus("Pending");
+				eventMailingLists.add(eventMailingList);
+			}
+			else{
+				invalidEmails += mail + " ";
+				errorExist = true;
+			}
 		}
 		event.setMaillingList(eventMailingLists);
 		new Thread(new Runnable() {
@@ -69,7 +77,10 @@ public class EventServiceImpl implements EventService {
 			}
 		}).start();
 		event = eventDAO.saveEvent(event);
-		return EventDTOMapper.mapEventToEventDTO(event);
+		EventDTO eventDTO = EventDTOMapper.mapEventToEventDTO(event);
+		if(errorExist)
+			eventDTO.setErrorMessage(invalidEmails);
+		return eventDTO;
 	}
 
 	public EventDTO getEvent(String eventId) {
@@ -91,8 +102,12 @@ public class EventServiceImpl implements EventService {
 		return eventDTOs;
 	}
 
-	public void acceptEvent(String urlPattern) throws Exception  {
-		eventDAO.acceptEvent(urlPattern);
+	public EventDTO getLastEvent(String currentUserId) {
+		return EventDTOMapper.mapEventToEventDTO(eventDAO.getLastEvent(currentUserId));
+	}
+
+	public void acceptEvent(String urlPattern,String currentLogedInEmail) throws Exception  {
+		eventDAO.acceptEvent(urlPattern,currentLogedInEmail);
 	}
 
 	public void rejectEvent(String urlPattern) throws Exception  {
@@ -100,7 +115,13 @@ public class EventServiceImpl implements EventService {
 	}
 
 	public List<AcceptListDTO> getEventAttendance(String eventId) {
-		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getEventAttendance(eventId));
+		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getEventAttendance(eventId),null);
+	}
+	
+	
+
+	public List<AcceptListDTO> refreshEventAttendance(String id,String onlineFlag) {
+		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getRefreshedAttendance(id),onlineFlag);
 	}
 
 	public EventDAO getEventDAO() {
