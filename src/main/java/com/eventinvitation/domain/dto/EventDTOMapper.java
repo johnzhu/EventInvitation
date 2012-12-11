@@ -39,7 +39,7 @@ public class EventDTOMapper {
 				acceptListDTO.setName(mailingList.getUserDetailsEntity().getName());
 				acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
 				if(onlineFlag != null){
-					if(((currentDate.getTime() - mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().getTime())/60) > Integer.parseInt(onlineFlag)){
+					if(((currentDate.getTime() - mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().getTime())/1000) > Integer.parseInt(onlineFlag)){
 						acceptListDTO.setOnline(false);
 					}					
 					else{
