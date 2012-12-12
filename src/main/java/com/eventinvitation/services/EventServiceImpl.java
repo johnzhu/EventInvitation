@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eventinvitation.dao.EventDAO;
+import com.eventinvitation.dao.UserDAO;
 import com.eventinvitation.domain.Address;
 import com.eventinvitation.domain.EntityAudit;
 import com.eventinvitation.domain.Event;
 import com.eventinvitation.domain.EventMailingList;
 import com.eventinvitation.domain.UserDetailsEntity;
+import com.eventinvitation.domain.UserEntity;
 import com.eventinvitation.domain.dto.AcceptListDTO;
 import com.eventinvitation.domain.dto.EventDTO;
 import com.eventinvitation.domain.dto.EventDTOMapper;
@@ -30,6 +32,9 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	private EventDAO eventDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
 
 	@Autowired
 	private Mailer mailer;
@@ -118,10 +123,23 @@ public class EventServiceImpl implements EventService {
 		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getEventAttendance(eventId),null);
 	}
 	
-	
+	public boolean refreshUserStatus(String userId, String onlineFlag) {
+		UserEntity userEntity = getUserDAO().getUser(userId);
+		if(userEntity != null){
+			UserDetailsEntity userDetailsEntity = userEntity.getUserDetails();
+			Date currentDate = new Date();
+			if(((currentDate.getTime() - userDetailsEntity.getAudit().getUpdatedOn().getTime())/1000) > Integer.parseInt(onlineFlag)){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		return false;
+	}
 
-	public List<AcceptListDTO> refreshEventAttendance(String id,String onlineFlag) {
-		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getRefreshedAttendance(id),onlineFlag);
+	public List<AcceptListDTO> refreshListStatus(String eventId,String onlineFlag, String listName) {
+		return EventDTOMapper.mapMaillingListToAcceptListDTO(eventDAO.getRefreshedAttendance(eventId,listName),onlineFlag);
 	}
 
 	public EventDAO getEventDAO() {
@@ -138,6 +156,14 @@ public class EventServiceImpl implements EventService {
 
 	public void setMailer(Mailer mailer) {
 		this.mailer = mailer;
+	}
+	
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 }

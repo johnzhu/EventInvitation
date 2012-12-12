@@ -111,6 +111,14 @@ public class UserDAOImpl implements UserDAO {
 		session.flush();
 		session.close();
 	}
+	
+	public UserEntity getUser(String userId){
+		Session currentSession = getSessionFactory().getCurrentSession();
+		Criteria criteria = currentSession.createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity userEntity = (UserEntity)criteria.uniqueResult();
+		return userEntity;
+	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

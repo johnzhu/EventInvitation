@@ -23,7 +23,9 @@ public interface EventService {
 	public EventDTO getEventByPattern(String pattern);
 
 	public EventDTO getLastEvent(String currentUserId);
-
-	public List<AcceptListDTO> refreshEventAttendance(String id,String onlineFlag);
+	
+	public boolean refreshUserStatus(String userId,String onlineFlag);
+	
+	public List<AcceptListDTO> refreshListStatus(String eventId,String onlineFlag,String listName);
 
 }

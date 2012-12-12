@@ -130,11 +130,11 @@ public class EventDAOImpl implements EventDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<EventMailingList> getRefreshedAttendance(String id) {
+	public List<EventMailingList> getRefreshedAttendance(String id,String listName) {
 		Session session = getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(EventMailingList.class);
 		criteria.add(Restrictions.eq("event.id", id));
-		criteria.add(Restrictions.eq("status", "Accepted"));
+		criteria.add(Restrictions.eq("status", listName));
 		List<EventMailingList> eventMailingLists = criteria.list();
 		if(eventMailingLists != null){
 			for(EventMailingList eventMailingList : eventMailingLists){

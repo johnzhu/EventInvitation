@@ -23,5 +23,5 @@ public interface EventDAO {
 
 	public Event getLastEvent(String currentUserId);
 
-	public List<EventMailingList> getRefreshedAttendance(String id);
+	public List<EventMailingList> getRefreshedAttendance(String id,String listName);
 }

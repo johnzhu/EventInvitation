@@ -13,4 +13,6 @@ public interface UserDAO {
 	public String isUserExistUsingUrlPattern(String urlPattern);
 	
 	public void updateUsetOnlineDate(String userId);
+	
+	public UserEntity getUser(String userId);
 }

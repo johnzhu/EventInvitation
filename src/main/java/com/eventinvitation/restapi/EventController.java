@@ -77,9 +77,15 @@ public class EventController extends BaseController {
 		return getEventService().getEventAttendance(id);
 	}
 	
-	@RequestMapping(value = "/restapi/secured/refresh", method = RequestMethod.GET,params={"id","online_flag"})
-	public @ResponseBody List<AcceptListDTO> refresh(@RequestParam(value = "id", required = true) String id,@RequestParam(value = "online_flag", required = true) String onlineFlag) {
-		return getEventService().refreshEventAttendance(id,onlineFlag);
+	@RequestMapping(value = "/restapi/secured/refresh", method = RequestMethod.GET,params={"id","online_flag","list_name"})
+	public @ResponseBody List<AcceptListDTO> refresh(@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "online_flag", required = true) String onlineFlag,@RequestParam(value = "list_name", required = true) String listName) {
+		return getEventService().refreshListStatus(id,onlineFlag,listName);
+	}
+	
+	@RequestMapping(value = "/restapi/secured/refresh_user_status", method = RequestMethod.GET,params={"id","online_flag"})
+	public @ResponseBody boolean refreshUserStatus(@RequestParam(value = "id", required = true) String id,@RequestParam(value = "online_flag", required = true) String onlineFlag) {
+		return getEventService().refreshUserStatus(id,onlineFlag);
 	}
 
 	public EventService getEventService() {
