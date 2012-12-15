@@ -41,7 +41,7 @@ public class EventServiceImpl implements EventService {
 
 	private List<EventMailingList> eventMailingLists;
 
-	public EventDTO createEvent(String name, String street,String country,String state, String time,
+	public EventDTO createEvent(String name, String street,String country,String state,String city, String time,
 			String description, String[] mailling_list, UserDetailsEntity owner) {
 		String invalidEmails = "Invalid Emails: ";
 		boolean errorExist = false;
@@ -50,6 +50,7 @@ public class EventServiceImpl implements EventService {
 		address.setCountry(country);
 		address.setState(state);
 		address.setStreet(street);
+		address.setCity(city);
 		if(Validator.isValidAddress(address))
 			event.setAddress(address);
 		event.setDdescription(description);
@@ -62,10 +63,10 @@ public class EventServiceImpl implements EventService {
 		event.setAudit(audit);
 		eventMailingLists = new ArrayList<EventMailingList>();
 		for (String mail : mailling_list) {
-			if(Validator.isValidEmail(mail)){
+			if(Validator.isValidEmail(mail.trim())){
 				EventMailingList eventMailingList = new EventMailingList();
 				eventMailingList.setAudit(audit);
-				eventMailingList.setEmail(mail);
+				eventMailingList.setEmail(mail.trim());
 				eventMailingList.setEvent(event);
 				eventMailingList.setStatus("Pending");
 				eventMailingLists.add(eventMailingList);
@@ -98,7 +99,8 @@ public class EventServiceImpl implements EventService {
 
 	public List<EventDTO> listEventsByUser(String userId) {
 		List<EventDTO> eventDTOs = new ArrayList<EventDTO>();
-		List<Event> events = eventDAO.listEventsByUser(userId);
+		UserEntity userEntity = userDAO.getUser(userId);
+		List<Event> events = eventDAO.listEventsByUser(userEntity.getUserDetails().getEmail());
 		if (events != null) {
 			for (Event event : events) {
 				eventDTOs.add(EventDTOMapper.mapEventToEventDTO(event));
@@ -107,8 +109,8 @@ public class EventServiceImpl implements EventService {
 		return eventDTOs;
 	}
 
-	public EventDTO getLastEvent(String currentUserId) {
-		return EventDTOMapper.mapEventToEventDTO(eventDAO.getLastEvent(currentUserId));
+	public EventDTO getLastEvent(String userEmail) {
+		return EventDTOMapper.mapEventToEventDTO(eventDAO.getLastEvent(userEmail));
 	}
 
 	public void acceptEvent(String urlPattern,String currentLogedInEmail) throws Exception  {
@@ -128,7 +130,7 @@ public class EventServiceImpl implements EventService {
 		if(userEntity != null){
 			UserDetailsEntity userDetailsEntity = userEntity.getUserDetails();
 			Date currentDate = new Date();
-			if(((currentDate.getTime() - userDetailsEntity.getAudit().getUpdatedOn().getTime())/1000) > Integer.parseInt(onlineFlag)){
+			if((((currentDate.getTime() - userDetailsEntity.getAudit().getUpdatedOn().getTime())/1000))/60 > Integer.parseInt(onlineFlag)){
 				return false;
 			}
 			else{

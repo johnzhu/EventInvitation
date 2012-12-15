@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -48,10 +46,6 @@ public class Event extends AbstractEntity implements Auditable {
 	@ManyToOne
 	@JoinColumn(name="USER_ID")
 	private UserDetailsEntity owner;
-	
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="USER_EVENTS",joinColumns={@JoinColumn(name="EVENT_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})
-	private List<UserDetailsEntity> attendes;
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="EVENT_ID")
@@ -106,14 +100,6 @@ public class Event extends AbstractEntity implements Auditable {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public List<UserDetailsEntity> getAttendes() {
-		return attendes;
-	}
-
-	public void setAttendes(List<UserDetailsEntity> attendes) {
-		this.attendes = attendes;
 	}
 
 	public UserDetailsEntity getOwner() {

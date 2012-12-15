@@ -11,6 +11,8 @@ public class AddressDTO implements Serializable {
 	private String state;
 	
 	private String country;
+	
+	private String city;
 
 	public String getStreet() {
 		return street;
@@ -34,6 +36,14 @@ public class AddressDTO implements Serializable {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 	
 	

@@ -11,7 +11,7 @@ public interface EventDAO {
 	
 	public Event getEvent(String eventId);
 	
-	public List<Event> listEventsByUser(String userId);
+	public List<Event> listEventsByUser(String userEmail);
 	
 	public void acceptEvent(String urlPattern,String currentEmail) throws Exception ;
 	
@@ -21,7 +21,7 @@ public interface EventDAO {
 
 	public Event getEventByPattern(String pattern);
 
-	public Event getLastEvent(String currentUserId);
+	public Event getLastEvent(String userEmail);
 
 	public List<EventMailingList> getRefreshedAttendance(String id,String listName);
 }

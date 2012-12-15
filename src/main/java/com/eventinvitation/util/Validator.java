@@ -40,6 +40,9 @@ public class Validator {
 		if(address.getStreet() != null && !address.getStreet().equals("")){
 			return true;
 		}
+		if(address.getCity() != null && !address.getCity().equals("")){
+			return true;
+		}
 		return false;
 	}
 	

@@ -29,7 +29,7 @@ public class UserController extends BaseController{
 		return UserDTOMapper.mapUserEntityToUserDTO(getLoggedInUser());
 	}
 	
-	@RequestMapping(value = "/restapi/sign_up", method = RequestMethod.POST,params={"user_name","email","street","full_name","password","state","country"}, produces = "application/json")
+	@RequestMapping(value = "/restapi/sign_up", method = RequestMethod.POST,params={"user_name","email","street","full_name","password","state","country","city"}, produces = "application/json")
 	public @ResponseBody UserDTO sign_up(
 			@RequestParam(value = "user_name", required = true) String username,
 			@RequestParam(value = "email", required = true) String email,
@@ -37,7 +37,17 @@ public class UserController extends BaseController{
 			@RequestParam(value = "password", required = true) String password,
 			@RequestParam(value = "full_name", required = true) String fullName,
 			@RequestParam(value = "country", required = true) String country,
-			@RequestParam(value = "state", required = true) String state) throws Exception{
+			@RequestParam(value = "state", required = true) String state,
+			@RequestParam(value = "city", required = true) String city) throws Exception{
+		
+		username = username.trim();
+		email    = email.trim();
+		street   = street.trim();
+		password = password.trim();
+		fullName = fullName.trim();
+		country  = country.trim();
+		state    = state.trim();
+		city     = city.trim();		
 		
 		if(!Validator.isValidPassword(password))
 			throw new Exception("Error: Invalid password, Minimum length is 8 digits/characters");
@@ -45,12 +55,12 @@ public class UserController extends BaseController{
 		if(!Validator.isValidEmail(email))
 			throw new Exception("Error: Invalid email format");
 		
-		return getUserService().signup(username, email, street, fullName, password,state,country);
+		return getUserService().signup(username, email, street, fullName, password,state,country,city);
 	}
 
 	@RequestMapping(value = "/restapi/is_user", method = RequestMethod.GET,params={"url"})
 	public @ResponseBody String isUser(@RequestParam(value = "url", required = true) String url) {
-		return getUserService().checkUserExist(url);
+		return getUserService().checkUserExist(url.trim());
 	}
 
 	public UserService getUserService() {

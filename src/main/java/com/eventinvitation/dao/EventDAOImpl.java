@@ -52,14 +52,6 @@ public class EventDAOImpl implements EventDAO {
 		return event;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Event> listEventsByUser(String userId) {
-		Session session = getSessionFactory().getCurrentSession();
-		Criteria criteria = session.createCriteria(Event.class);
-		criteria.add(Restrictions.eq("owner.id", userId));
-		return criteria.list();
-	}
-
 	public void acceptEvent(String urlPattern,String currentEmail) throws Exception {
 		Session session = getSessionFactory().getCurrentSession();
 		Criteria criteria = session.createCriteria(EventMailingList.class);
@@ -69,22 +61,11 @@ public class EventDAOImpl implements EventDAO {
 			if(!eventMailingList.getEmail().equals(currentEmail)){
 				throw new Exception("You are not authorized to access this link.");
 			}
-			Event event = eventMailingList.getEvent();
 			eventMailingList.setStatus("Accepted");
 			EntityAudit audit = eventMailingList.getAudit();
 			audit.setUpdatedOn(new Date());
 			eventMailingList.setAudit(audit);
 			session.update(eventMailingList);
-			UserDetailsEntity userDetailsEntity = eventMailingList.getUserDetailsEntity();
-			List<UserDetailsEntity> attends = event.getAttendes();
-			if(attends != null)
-				event.getAttendes().add(userDetailsEntity);
-			else{
-				attends = new ArrayList<UserDetailsEntity>();
-				attends.add(userDetailsEntity);
-				event.setAttendes(attends);
-			}
-			session.update(event);
 		}
 		else{
 			throw new Exception("Can't found this event to accept.");
@@ -148,24 +129,51 @@ public class EventDAOImpl implements EventDAO {
 		}
 		return eventMailingLists;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> listEventsByUser(String userEmail) {
+		Session session = getSessionFactory().getCurrentSession();
+		Criteria criteria = session.createCriteria(Event.class);
+		criteria.createAlias("owner", "owner");
+		criteria.add(Restrictions.eq("owner.email", userEmail));
+		List<Event> events = criteria.list();
+		criteria = session.createCriteria(EventMailingList.class);
+		criteria.add(Restrictions.eq("status", "Accepted"));
+		criteria.add(Restrictions.eq("email", userEmail));
+		List<EventMailingList> acceptedEvents = criteria.list();
+		if(events != null){
+			if(acceptedEvents != null && !acceptedEvents.isEmpty()){
+				for(EventMailingList eventMailingList : acceptedEvents)
+					events.add(eventMailingList.getEvent());
+			}
+		}else{
+			if(acceptedEvents != null && !acceptedEvents.isEmpty()){
+				events = new ArrayList<Event>();
+				for(EventMailingList eventMailingList : acceptedEvents)
+					events.add(eventMailingList.getEvent());
+			}
+		}
+		return events;
+	}
 
 	@SuppressWarnings("rawtypes")
-	public Event getLastEvent(String currentUserId) {
+	public Event getLastEvent(String userEmail) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(Event.class);
-		criteria.createAlias("attendes", "attendes");
-		criteria.add(Restrictions.eq("attendes.id", currentUserId));
+		Criteria criteria = session.createCriteria(EventMailingList.class);
+		criteria.add(Restrictions.eq("status", "Accepted"));
+		criteria.add(Restrictions.eq("email", userEmail));
 		criteria.addOrder(Order.desc("audit.createdOn"));
 		criteria.setMaxResults(1);
 		List result = criteria.list();
 		if(result != null && result.size() > 0){
-			Event event = (Event)result.get(0);
+			Event event = ((EventMailingList)result.get(0)).getEvent();
 			event.setMaillingList(getEventAttendance(event.getId()));
 			return event;
 		}
 		else{
 			criteria = session.createCriteria(Event.class);
-			criteria.add(Restrictions.eq("owner.id", currentUserId));
+			criteria.createAlias("owner", "owner");
+			criteria.add(Restrictions.eq("owner.email", userEmail));
 			criteria.addOrder(Order.desc("audit.createdOn"));
 			criteria.setMaxResults(1);
 			result = criteria.list();

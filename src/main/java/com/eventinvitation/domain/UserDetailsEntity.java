@@ -7,7 +7,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -52,9 +51,6 @@ public class UserDetailsEntity extends AbstractEntity implements Auditable {
 	
 	@OneToMany(mappedBy="owner")
 	private List<Event> myEvents;
-	
-	@ManyToMany(mappedBy="attendes")
-	private List<Event> attendedEvents;
 
 	public UserEntity getUser() {
 		return user;
@@ -102,14 +98,6 @@ public class UserDetailsEntity extends AbstractEntity implements Auditable {
 
 	public void setMyEvents(List<Event> myEvents) {
 		this.myEvents = myEvents;
-	}
-
-	public List<Event> getAttendedEvents() {
-		return attendedEvents;
-	}
-
-	public void setAttendedEvents(List<Event> attendedEvents) {
-		this.attendedEvents = attendedEvents;
 	}
 
 	public Address getAddress() {

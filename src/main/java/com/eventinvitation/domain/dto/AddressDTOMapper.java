@@ -10,6 +10,7 @@ public class AddressDTOMapper {
 			addressDTO.setCountry(address.getCountry());
 			addressDTO.setState(address.getState());
 			addressDTO.setStreet(address.getStreet());
+			addressDTO.setCity(address.getCity());
 		}
 		return addressDTO;
 	}

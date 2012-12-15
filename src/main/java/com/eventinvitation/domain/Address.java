@@ -20,6 +20,9 @@ public class Address implements Serializable {
 	@Column(name = "STREET")
 	private String street;
 	
+	@Column(name = "CITY")
+	private String city;
+	
 	@Column(name = "STATE")
 	private String state;
 	
@@ -56,6 +59,14 @@ public class Address implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 	
 	

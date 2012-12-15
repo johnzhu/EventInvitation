@@ -8,7 +8,7 @@ import com.eventinvitation.domain.dto.EventDTO;
 
 public interface EventService {
 	
-	public EventDTO createEvent(String name, String street,String country,String state, String time,String description,String[] mailling_list,UserDetailsEntity owner);
+	public EventDTO createEvent(String name, String street,String country,String state,String city, String time,String description,String[] mailling_list,UserDetailsEntity owner);
 	
 	public EventDTO getEvent(String eventId);
 	
@@ -22,7 +22,7 @@ public interface EventService {
 
 	public EventDTO getEventByPattern(String pattern);
 
-	public EventDTO getLastEvent(String currentUserId);
+	public EventDTO getLastEvent(String userEmail);
 	
 	public boolean refreshUserStatus(String userId,String onlineFlag);
 	

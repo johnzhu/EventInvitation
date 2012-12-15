@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 		this.userDAO = userDAO;
 	}
 
-	public UserDTO signup(String userName, String email, String street,String fullName, String password,String state,String country) throws Exception{
+	public UserDTO signup(String userName, String email, String street,String fullName, String password,String state,String country,String city) throws Exception{
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEnabled(true);
 		userEntity.setPassword(md5PasswordEncoder.encodePassword(password, null));
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
 		address.setCountry(country);
 		address.setState(state);
 		address.setStreet(street);
+		address.setCity(city);
 		if(Validator.isValidAddress(address))
 			userDetailsEntity.setAddress(address);
 		userDetailsEntity.setEmail(email);

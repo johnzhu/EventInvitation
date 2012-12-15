@@ -36,7 +36,7 @@ public class CustomDataBaseAuthenticator implements AuthenticationProvider{
 			
 			try 
 			{
-				loginDTO = userLoginService.handleUserLogin(authentication.getName(), authentication.getCredentials().toString());
+				loginDTO = userLoginService.handleUserLogin(authentication.getName().trim(), authentication.getCredentials().toString());
 			} catch (Exception e) 
 			{
 				e.printStackTrace();
