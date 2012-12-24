@@ -57,6 +57,12 @@ public class UserController extends BaseController{
 		
 		return getUserService().signup(username, email, street, fullName, password,state,country,city);
 	}
+	
+	@RequestMapping(value = "/restapi/secured/logout", method = RequestMethod.GET)
+	public @ResponseBody boolean logout() {
+		userService.logout(getLoggedInUser().getUserDetails().getId());
+		return true;
+	}
 
 	@RequestMapping(value = "/restapi/is_user", method = RequestMethod.GET,params={"url"})
 	public @ResponseBody String isUser(@RequestParam(value = "url", required = true) String url) {

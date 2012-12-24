@@ -130,6 +130,8 @@ public class EventServiceImpl implements EventService {
 		if(userEntity != null){
 			UserDetailsEntity userDetailsEntity = userEntity.getUserDetails();
 			Date currentDate = new Date();
+			if(userDetailsEntity.getAudit().getUpdatedOn() == null)
+				return false;
 			if((((currentDate.getTime() - userDetailsEntity.getAudit().getUpdatedOn().getTime())/1000))/60 > Integer.parseInt(onlineFlag)){
 				return false;
 			}

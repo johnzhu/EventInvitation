@@ -15,4 +15,6 @@ public interface UserDAO {
 	public void updateUsetOnlineDate(String userId);
 	
 	public UserEntity getUser(String userId);
+	
+	public void logout(String userId);
 }

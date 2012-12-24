@@ -37,14 +37,20 @@ public class EventDTOMapper {
 			acceptListDTO.setStatus(mailingList.getStatus());
 			if(mailingList.getUserDetailsEntity() != null){
 				acceptListDTO.setName(mailingList.getUserDetailsEntity().getName());
-				acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
-				if(onlineFlag != null){
-					if((((currentDate.getTime() - mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().getTime())/1000))/60 > Integer.parseInt(onlineFlag)){
-						acceptListDTO.setOnline(false);
-					}					
-					else{
-						acceptListDTO.setOnline(true);
+				if(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn() != null){
+					acceptListDTO.setLastOnlineDateTime(mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().toString());
+					if(onlineFlag != null){
+						if((((currentDate.getTime() - mailingList.getUserDetailsEntity().getAudit().getUpdatedOn().getTime())/1000))/60 > Integer.parseInt(onlineFlag)){
+							acceptListDTO.setOnline(false);
+						}					
+						else{
+							acceptListDTO.setOnline(true);
+						}
 					}
+				}
+				else{
+					acceptListDTO.setLastOnlineDateTime(null);
+					acceptListDTO.setOnline(false);
 				}
 			}
 			acceptListDTOs.add(acceptListDTO);

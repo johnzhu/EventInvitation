@@ -112,6 +112,15 @@ public class UserDAOImpl implements UserDAO {
 		session.close();
 	}
 	
+	public void logout(String userId){
+		Session session = getSessionFactory().getCurrentSession();
+		UserDetailsEntity userDetailsEntity = (UserDetailsEntity) session.get(UserDetailsEntity.class, userId);
+		EntityAudit audit = userDetailsEntity.getAudit();
+		audit.setUpdatedOn(null);
+		userDetailsEntity.setAudit(audit);
+		session.update(userDetailsEntity);
+	}
+	
 	public UserEntity getUser(String userId){
 		Session currentSession = getSessionFactory().getCurrentSession();
 		Criteria criteria = currentSession.createCriteria(UserEntity.class);

@@ -59,6 +59,10 @@ public class UserServiceImpl implements UserService {
 		userEntity.setUserDetails(userDetailsEntity);
 		return UserDTOMapper.mapUserEntityToUserDTO(userDAO.save(userEntity));
 	}
+	
+	public void logout(String userId){
+		userDAO.logout(userId);
+	}
 
 	public String checkUserExist(String urlPattern) {
 		return userDAO.isUserExistUsingUrlPattern(urlPattern);
